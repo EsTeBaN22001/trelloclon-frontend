@@ -1,4 +1,11 @@
-import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import {
+  AbstractControl,
+  AsyncValidatorFn,
+  ValidationErrors,
+  ValidatorFn,
+} from '@angular/forms';
+import { AuthService } from '@services/auth.service';
+import { map, tap } from 'rxjs';
 
 export class CustomValidators {
   static MatchValidator(source: string, target: string): ValidatorFn {
@@ -9,6 +16,19 @@ export class CustomValidators {
       return sourceCtrl && targetCtrl && sourceCtrl.value !== targetCtrl.value
         ? { mismatch: true }
         : null;
+    };
+  }
+
+  static availableEmail(authService: AuthService): AsyncValidatorFn {
+    return (control: AbstractControl) => {
+      const emailValue = control.value;
+      return authService
+        .isAvailable(emailValue)
+        .pipe(
+          map(({ isAvailable }) =>
+            isAvailable ? null : { isAvailable: true },
+          ),
+        );
     };
   }
 }

@@ -1,5 +1,60 @@
-<h1 class="text-center font-bold py-2 text-gray-700">Enter your data</h1>
-<form [formGroup]="form" novalidate class="space-y-4" (ngSubmit)="register()">
+<form
+  [formGroup]="userForm"
+  novalidate
+  class="space-y-4"
+  (ngSubmit)="validateUser()"
+  *ngIf="!showRegister"
+>
+  <h1 class="text-center font-bold py-2 text-gray-700">Enter your email</h1>
+  <div>
+    <div class="relative">
+      <input
+        #nameInput
+        formControlName="email"
+        placeholder="Enter email"
+        type="email"
+        name="email"
+        class="w-full rounded bg-gray-100 border-gray-300 border-2"
+      />
+    </div>
+    <div
+      *ngIf="userForm.controls.email.touched && userForm.controls.email.invalid"
+    >
+      <p
+        *ngIf="userForm.controls.email.hasError('required')"
+        class="font-medium text-red-500 text-xs mt-1 ml-1"
+      >
+        This field is mandatory
+      </p>
+      <p
+        *ngIf="userForm.controls.email.hasError('isAvailable')"
+        class="font-medium text-red-500 text-xs mt-1 ml-1"
+      >
+        This email has already been used
+      </p>
+      <p
+        *ngIf="userForm.controls.email.hasError('email')"
+        class="font-medium text-red-500 text-xs mt-1 ml-1"
+      >
+        This field should be a email
+      </p>
+    </div>
+  </div>
+  <div>
+    <app-btn typeBtn="submit" color="success" [loading]="status === 'loading'"
+      >Register</app-btn
+    >
+  </div>
+</form>
+
+<form
+  [formGroup]="form"
+  novalidate
+  class="space-y-4"
+  (ngSubmit)="register()"
+  *ngIf="showRegister"
+>
+  <h1 class="text-center font-bold py-2 text-gray-700">Enter your data</h1>
   <div>
     <div class="relative">
       <input
@@ -31,6 +86,12 @@
       />
     </div>
     <div *ngIf="form.controls.email.touched && form.controls.email.invalid">
+      <p
+        *ngIf="form.controls.email.hasError('isAvailable')"
+        class="font-medium text-red-500 text-xs mt-1 ml-1"
+      >
+        This email has already been used
+      </p>
       <p
         *ngIf="form.controls.email.hasError('required')"
         class="font-medium text-red-500 text-xs mt-1 ml-1"
@@ -74,7 +135,7 @@
         *ngIf="form.controls.password.hasError('minlength')"
         class="font-medium text-red-500 text-xs mt-1 ml-1"
       >
-        This field should be greater than 6 characters
+        This field should be greater than 8 characters
       </p>
     </div>
   </div>
