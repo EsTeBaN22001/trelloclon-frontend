@@ -20,6 +20,7 @@ export class RedirectGuard implements CanActivate {
 
     if (isValidToken) {
       this.router.navigate(['/app'])
+      return false
     }
 
     return true

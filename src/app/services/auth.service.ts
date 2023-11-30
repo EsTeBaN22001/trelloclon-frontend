@@ -66,6 +66,7 @@ export class AuthService {
   }
 
   logout() {
+    this.tokenService.removeRefreshToken()
     this.tokenService.removeToken()
   }
 
