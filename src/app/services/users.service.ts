@@ -4,6 +4,7 @@ import { TokenService } from './token.service'
 import { environment } from '@environments/environment'
 import { User } from '@models/user.model'
 import { checkToken } from '@interceptors/token.interceptor'
+import { Board } from '@models/board.model'
 
 @Injectable({
   providedIn: 'root'
@@ -16,5 +17,9 @@ export class UsersService {
 
   getUsers() {
     return this.http.get<User[]>(`${environment.API_URL}/users`, { context: checkToken() })
+  }
+
+  getBoards() {
+    return this.http.get<Board[]>(`${environment.API_URL}/me/boards`, { context: checkToken() })
   }
 }

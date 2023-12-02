@@ -10,40 +10,42 @@ export class TokenService {
   constructor(private cookieService: CookieService) {}
 
   saveToken(token: string) {
-    // setCookie('token', token, { expires: 365, path: '/' })
-    this.cookieService.set('token', token)
+    setCookie('token', token, { expires: 365, path: '/' })
+    // this.cookieService.set('token', token)
   }
 
   saveRefreshToken(token: string) {
-    // setCookie('refresh-token', token, { expires: 365, path: '/' })
-    this.cookieService.set('refresh-token', token, 365, '/')
+    setCookie('refresh-token', token, { expires: 365, path: '/' })
+    // this.cookieService.set('refresh-token', token, 365, '/')
   }
 
   getToken() {
-    // const token = getCookie('token')
-    const token = this.cookieService.get('token')
+    const token = getCookie('token')
+    // const token = this.cookieService.get('token')
     return token
   }
 
   getRefreshToken() {
-    // const token = getCookie('refresh-token')
-    const token = this.cookieService.get('refresh-token')
+    const token = getCookie('refresh-token')
+    // const token = this.cookieService.get('refresh-token')
     return token
   }
 
   removeToken() {
-    // removeCookie('token')
-    this.cookieService.delete('token')
+    removeCookie('token')
+    // this.cookieService.delete('token')
   }
 
   removeRefreshToken() {
-    // removeCookie('refresh-token')
-    this.cookieService.delete('refresh-token')
+    removeCookie('refresh-token')
+    // this.cookieService.delete('refresh-token')
   }
 
   removeAllTokens() {
-    this.cookieService.delete('token')
-    this.cookieService.delete('refresh-token')
+    removeCookie('refresh-token')
+    removeCookie('token')
+    // this.cookieService.delete('refresh-token')
+    // this.cookieService.delete('token')
   }
 
   isValidToken(): boolean {

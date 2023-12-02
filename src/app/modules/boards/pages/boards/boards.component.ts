@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core'
 import { faBox, faWaveSquare, faClock, faAngleUp, faAngleDown, faHeart, faBorderAll, faUsers, faGear } from '@fortawesome/free-solid-svg-icons'
 import { faTrello } from '@fortawesome/free-brands-svg-icons'
 import { Board } from '@models/board.model'
-import { BoardsService } from '@services/boards.service'
+import { UsersService } from '@services/users.service'
 
 @Component({
   selector: 'app-boards',
@@ -22,10 +22,10 @@ export class BoardsComponent implements OnInit {
 
   boards: Board[] = []
 
-  constructor(private boardsService: BoardsService) {}
+  constructor(private userService: UsersService) {}
 
   ngOnInit(): void {
-    this.boardsService.getBoards().subscribe(boards => {
+    this.userService.getBoards().subscribe(boards => {
       this.boards = boards
     })
   }
