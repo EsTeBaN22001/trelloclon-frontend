@@ -19,6 +19,7 @@ export class NavbarComponent implements OnInit {
 
   isOpenOverlayAvatar = false
   isOpenOverlayBoards = false
+  isOpenOverlayCreateBoard = false
 
   constructor(
     private authService: AuthService,
