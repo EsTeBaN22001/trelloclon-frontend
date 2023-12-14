@@ -17,8 +17,9 @@ export class NavbarComponent implements OnInit {
   faClose = faClose
   faAngleDown = faAngleDown
 
-  isOpenOverlayAvatar = false
-  isOpenOverlayBoards = false
+  isOpenOverlayAvatar: boolean = false
+  isOpenOverlayBoards: boolean = false
+  isOpenOverlayCreateBoard: boolean = false
 
   constructor(
     private authService: AuthService,
@@ -37,5 +38,10 @@ export class NavbarComponent implements OnInit {
 
   isValidToken() {
     console.log(this.tokenService.isValidToken())
+  }
+
+  // Recibiendo el output del app-board-form (component)
+  closeOverlay(event: boolean) {
+    this.isOpenOverlayCreateBoard = event
   }
 }
