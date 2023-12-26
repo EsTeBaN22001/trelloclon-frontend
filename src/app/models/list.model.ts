@@ -5,4 +5,9 @@ export interface List {
   title: string
   position: number
   cards: Card[]
+  showNewCardForm?: boolean
+}
+
+export interface createListDto extends Omit<List, 'id' | 'cards'> {
+  boardId: string
 }

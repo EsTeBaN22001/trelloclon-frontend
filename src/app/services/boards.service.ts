@@ -5,6 +5,7 @@ import { checkToken } from '@interceptors/token.interceptor'
 import { Board } from '@models/board.model'
 import { Card } from '@models/card.model'
 import { Colors } from '@models/colors.model'
+import { List } from '@models/list.model'
 
 @Injectable({
   providedIn: 'root'
@@ -47,6 +48,14 @@ export class BoardsService {
     }
 
     return 0
+  }
+
+  getPositionNewItem(elements: Card[] | List[]) {
+    if (elements.length === 0) {
+      return this.BUFFER_SPACE
+    }
+    const lastItemPos = elements[elements.length - 1].position
+    return lastItemPos + this.BUFFER_SPACE
   }
 
   createBoard(title: string, backgroundColor: Colors) {

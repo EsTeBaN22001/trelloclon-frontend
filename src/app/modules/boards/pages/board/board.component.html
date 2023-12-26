@@ -9,7 +9,12 @@
           <h3 class="text-sm font-bold ml-2">{{ list.title }}</h3>
         </div>
 
-        <div class="text-sm mt-2 min-h-[2.5rem]" cdkDropList [id]="list.id" (cdkDropListDropped)="drop($event)" [cdkDropListData]="list.cards">
+        <div
+          class="text-sm mt-2 min-h-[2.5rem]"
+          cdkDropList
+          [id]="list.id"
+          (cdkDropListDropped)="drop($event)"
+          [cdkDropListData]="list.cards">
           <div
             (click)="openDialog(card)"
             *ngFor="let card of list.cards"
@@ -18,8 +23,34 @@
             {{ card.title }}
           </div>
         </div>
+        <div class="mt-5">
+          <app-btn *ngIf="!list.showNewCardForm" color="gray" (click)="openFormNewCard(list)">
+            <fa-icon [icon]="faPlus"></fa-icon>
+            Add card
+          </app-btn>
+          <div *ngIf="list.showNewCardForm">
+            <textarea
+              [formControl]="inputCard"
+              class="w-full rounded text-xs border-gray-300 border-b-gray-400 border-b-2"></textarea>
+            <div class="flex space-x-2 justify-between">
+              <app-btn color="success" (click)="createCard(list)">Create</app-btn>
+              <app-btn color="gray" (click)="closeFormNewCard(list)">Close</app-btn>
+            </div>
+          </div>
+        </div>
       </div>
-      <app-btn color="light" class="shrink-0" (click)="addColumn()">Add Column</app-btn>
+      <app-btn *ngIf="!showNewListForm" color="light" class="shrink-0" (click)="showNewListForm = !showNewListForm"
+        >Add Column</app-btn
+      >
+      <div *ngIf="showNewListForm" class="rounded bg-gray-200 w-72 p-2 mr-3">
+        <textarea
+          [formControl]="inputNewList"
+          class="w-full rounded text-xs border-gray-300 border-b-gray-400 border-b-2"></textarea>
+        <div class="flex space-x-2 justify-between">
+          <app-btn color="success" (click)="addList()">Create</app-btn>
+          <app-btn color="gray" (click)="showNewListForm = !showNewListForm">Close</app-btn>
+        </div>
+      </div>
     </div>
   </div>
 </div>

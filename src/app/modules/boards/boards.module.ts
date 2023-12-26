@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core'
+import { ReactiveFormsModule } from '@angular/forms'
 import { CommonModule } from '@angular/common'
 import { DragDropModule } from '@angular/cdk/drag-drop'
 import { CdkAccordionModule } from '@angular/cdk/accordion'
@@ -14,6 +15,16 @@ import { RouterModule } from '@angular/router'
 
 @NgModule({
   declarations: [BoardsComponent, BoardComponent, TodoDialogComponent],
-  imports: [CommonModule, BoardsRoutingModule, SharedModule, DragDropModule, CdkAccordionModule, DialogModule, FontAwesomeModule, RouterModule]
+  imports: [
+    CommonModule,
+    BoardsRoutingModule,
+    SharedModule,
+    DragDropModule,
+    CdkAccordionModule,
+    DialogModule,
+    FontAwesomeModule,
+    RouterModule,
+    ReactiveFormsModule
+  ]
 })
 export class BoardsModule {}

@@ -1,6 +1,8 @@
 import { Component } from '@angular/core'
+import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms'
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop'
 import { Dialog } from '@angular/cdk/dialog'
+import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import { TodoDialogComponent } from '@boards/components/todo-dialog/todo-dialog.component'
 
 import { ToDo, Column } from '@models/todo.model'
@@ -9,6 +11,8 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { Board } from '@models/board.model'
 import { Card } from '@models/card.model'
 import { CardService } from '@services/card.service'
+import { List } from '@models/list.model'
+import { ListService } from '@services/list.service'
 
 @Component({
   selector: 'app-board',
@@ -27,12 +31,31 @@ import { CardService } from '@services/card.service'
 export class BoardComponent {
   board: Board | null = null
 
+  // Variable de estado para añadir una nueva columna/lista
+  showNewListForm: boolean = false
+
+  // Formulario para crear una nueva card
+  inputCard = new FormControl<string>('', {
+    nonNullable: true,
+    validators: [Validators.required]
+  })
+
+  // Formulario para crear una nueva List
+  inputNewList = new FormControl<string>('', {
+    nonNullable: true,
+    validators: [Validators.required]
+  })
+
+  // FontAwesome icons
+  faPlus = faPlus
+
   constructor(
     private dialog: Dialog,
     private boardsService: BoardsService,
     private router: Router,
     private route: ActivatedRoute,
-    private cardService: CardService
+    private cardService: CardService,
+    private listService: ListService
   ) {
     this.route.paramMap.subscribe(params => {
       const id = params.get('id')
@@ -48,7 +71,10 @@ export class BoardComponent {
   private getBoard(id: string) {
     this.boardsService.getBoard(id).subscribe(board => {
       this.board = board
-      // console.log(board)
+      const lists = this.board.lists
+      lists.forEach(list => {
+        console.log(list.showNewCardForm)
+      })
     })
   }
 
@@ -66,13 +92,6 @@ export class BoardComponent {
     this.updateCard(card, newItemPosition, parseInt(listId))
   }
 
-  addColumn() {
-    // this.columns.push({
-    //   title: 'New Column',
-    //   todos: []
-    // })
-  }
-
   openDialog(card: Card) {
     const dialogRef = this.dialog.open(TodoDialogComponent, {
       minWidth: '300px',
@@ -86,9 +105,68 @@ export class BoardComponent {
     })
   }
 
+  addList() {
+    const title = this.inputNewList.value
+
+    if (this.board) {
+      this.listService
+        .create({
+          title,
+          boardId: this.board.id,
+          position: this.boardsService.getPositionNewItem(this.board.lists)
+        })
+        .subscribe(list => {
+          this.board?.lists.push({
+            ...list,
+            cards: []
+          })
+          this.showNewListForm = false
+          this.inputNewList.setValue('')
+        })
+    }
+  }
+
+  openFormNewCard(list: List) {
+    if (this.board?.lists) {
+      this.board.lists = this.board.lists.map(iteratorList => {
+        if (iteratorList.id === list.id) {
+          return {
+            ...iteratorList,
+            showNewCardForm: true
+          }
+        }
+        return {
+          ...iteratorList,
+          showNewCardForm: false
+        }
+      })
+    }
+  }
+
+  closeFormNewCard(list: List) {
+    list.showNewCardForm = false
+  }
+
+  createCard(list: List) {
+    const title = this.inputCard.value
+
+    if (this.board) {
+      this.cardService
+        .create({
+          title,
+          listId: list.id,
+          boardId: this.board.id,
+          position: this.boardsService.getPositionNewItem(list.cards)
+        })
+        .subscribe(card => {
+          list.cards.push(card)
+          this.inputCard.setValue('')
+          list.showNewCardForm = false
+        })
+    }
+  }
+
   updateCard(card: Card, position: number, listId: number) {
-    this.cardService.updateCard(card.id, { position, listId }).subscribe(cardUpdated => {
-      // console.log(cardUpdated)
-    })
+    this.cardService.updateCard(card.id, { position, listId }).subscribe(cardUpdated => {})
   }
 }
