@@ -1,11 +1,9 @@
-import { Component } from '@angular/core'
-import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms'
+import { Component, OnDestroy } from '@angular/core'
+import { FormControl, Validators } from '@angular/forms'
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop'
 import { Dialog } from '@angular/cdk/dialog'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import { TodoDialogComponent } from '@boards/components/todo-dialog/todo-dialog.component'
-
-import { ToDo, Column } from '@models/todo.model'
 import { BoardsService } from '@services/boards.service'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Board } from '@models/board.model'
@@ -13,6 +11,7 @@ import { Card } from '@models/card.model'
 import { CardService } from '@services/card.service'
 import { List } from '@models/list.model'
 import { ListService } from '@services/list.service'
+import { BACKGROUNDS } from '@models/colors.model'
 
 @Component({
   selector: 'app-board',
@@ -28,7 +27,7 @@ import { ListService } from '@services/list.service'
     `
   ]
 })
-export class BoardComponent {
+export class BoardComponent implements OnDestroy {
   board: Board | null = null
 
   // Variable de estado para añadir una nueva columna/lista
@@ -49,6 +48,8 @@ export class BoardComponent {
   // FontAwesome icons
   faPlus = faPlus
 
+  backgroundColor = BACKGROUNDS
+
   constructor(
     private dialog: Dialog,
     private boardsService: BoardsService,
@@ -68,13 +69,13 @@ export class BoardComponent {
     })
   }
 
+  ngOnDestroy(): void {
+    this.boardsService.backgroundColor$.next('sky')
+  }
+
   private getBoard(id: string) {
     this.boardsService.getBoard(id).subscribe(board => {
       this.board = board
-      const lists = this.board.lists
-      lists.forEach(list => {
-        console.log(list.showNewCardForm)
-      })
     })
   }
 
@@ -168,5 +169,15 @@ export class BoardComponent {
 
   updateCard(card: Card, position: number, listId: number) {
     this.cardService.updateCard(card.id, { position, listId }).subscribe(cardUpdated => {})
+  }
+
+  get colors() {
+    if (this.board) {
+      const classes = this.backgroundColor[this.board.backgroundColor]
+      if (classes) {
+        return classes ? classes : {}
+      }
+    }
+    return {}
   }
 }

@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core'
 import { Router } from '@angular/router'
 import { faBell, faInfoCircle, faClose, faAngleDown } from '@fortawesome/free-solid-svg-icons'
+import { Colors } from '@models/colors.model'
 import { User } from '@models/user.model'
 import { AuthService } from '@services/auth.service'
+import { BoardsService } from '@services/boards.service'
 import { TokenService } from '@services/token.service'
 
 @Component({
@@ -11,6 +13,8 @@ import { TokenService } from '@services/token.service'
 })
 export class NavbarComponent implements OnInit {
   user: User | null = null
+
+  bgColor: Colors = 'sky'
 
   faBell = faBell
   faInfoCircle = faInfoCircle
@@ -23,12 +27,15 @@ export class NavbarComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private router: Router,
-    private tokenService: TokenService
+    private tokenService: TokenService,
+    private boardService: BoardsService
   ) {}
 
   ngOnInit(): void {
     this.authService.getProfile().subscribe(user => (this.user = user))
+    this.boardService.backgroundColor$.subscribe(color => {
+      this.bgColor = color
+    })
   }
 
   logout() {

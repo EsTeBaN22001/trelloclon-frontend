@@ -6,6 +6,8 @@ import { Board } from '@models/board.model'
 import { Card } from '@models/card.model'
 import { Colors } from '@models/colors.model'
 import { List } from '@models/list.model'
+import { BehaviorSubject } from 'rxjs'
+import { tap } from 'rxjs/operators'
 
 @Injectable({
   providedIn: 'root'
@@ -15,10 +17,14 @@ export class BoardsService {
   // Constante para la posición de las cards
   private readonly BUFFER_SPACE = 65535
 
+  backgroundColor$ = new BehaviorSubject<Colors>('sky')
+
   constructor(private http: HttpClient) {}
 
   getBoard(id: Board['id']) {
-    return this.http.get<Board>(`${this.apiUrl}/${id}`, { context: checkToken() })
+    return this.http
+      .get<Board>(`${this.apiUrl}/${id}`, { context: checkToken() })
+      .pipe(tap(board => this.setBackgroundColor(board.backgroundColor)))
   }
 
   // Obtiene la posición en la que se encuentra una card dentro de la lista/columna
@@ -60,5 +66,9 @@ export class BoardsService {
 
   createBoard(title: string, backgroundColor: Colors) {
     return this.http.post<Board>(this.apiUrl, { title, backgroundColor }, { context: checkToken() })
+  }
+
+  setBackgroundColor(color: Colors) {
+    this.backgroundColor$.next(color)
   }
 }
