@@ -27,8 +27,7 @@ export class AuthService {
       })
       .pipe(
         tap(response => {
-          this.tokenService.saveToken(response.access_token)
-          this.tokenService.saveRefreshToken(response.refresh_token)
+          this.tokenService.saveToken(response.token)
         })
       )
   }
@@ -39,15 +38,6 @@ export class AuthService {
       email,
       password
     })
-  }
-
-  refreshToken(refreshToken: string) {
-    return this.http.post<ResponseLogin>(`${this.apiUrl}/refresh-token`, { refreshToken }).pipe(
-      tap(response => {
-        this.tokenService.saveToken(response.access_token)
-        this.tokenService.saveRefreshToken(response.refresh_token)
-      })
-    )
   }
 
   isAvailable(email: string) {
@@ -67,7 +57,6 @@ export class AuthService {
 
   logout() {
     this.tokenService.removeToken()
-    this.tokenService.removeRefreshToken()
   }
 
   getProfile() {

@@ -4,8 +4,9 @@
 
 export const environment = {
   production: false,
-  API_URL: 'https://fake-trello-api.herokuapp.com/api/v1'
-};
+  // API_URL: 'https://fake-trello-api.herokuapp.com/api/v1',
+  API_URL: 'http://localhost:5000/api'
+}
 
 /*
  * For easier debugging in development mode, you can import the following file
