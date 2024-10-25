@@ -35,7 +35,6 @@ export class BoardFormComponent implements OnInit {
   ngOnInit(): void {
     this.form.get('backgroundColor')?.valueChanges.subscribe(color => {
       this.backgroundColor = color as Colors
-      console.log(this.backgroundColor)
     })
   }
 

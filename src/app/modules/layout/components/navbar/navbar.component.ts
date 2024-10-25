@@ -44,7 +44,6 @@ export class NavbarComponent implements OnInit {
   }
 
   isValidToken() {
-    console.log(this.tokenService.isValidToken())
   }
 
   // Recibiendo el output del app-board-form (component)

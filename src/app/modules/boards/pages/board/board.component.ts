@@ -102,7 +102,7 @@ export class BoardComponent implements OnDestroy {
       }
     })
     dialogRef.closed.subscribe(output => {
-      console.log(output)
+      
     })
   }
 

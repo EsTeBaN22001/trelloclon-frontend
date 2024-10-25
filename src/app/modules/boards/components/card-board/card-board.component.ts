@@ -13,7 +13,6 @@ export class CardBoardComponent {
   mapColors = COLORS
 
   get colors() {
-    // console.log(this.mapColors[this.color])
     const classes = this.mapColors[this.color]
     return classes ? classes : {}
   }

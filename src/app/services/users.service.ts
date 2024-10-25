@@ -20,6 +20,6 @@ export class UsersService {
   }
 
   getBoards() {
-    return this.http.get<Board[]>(`${environment.API_URL}/me/boards`, { context: checkToken() })
+    return this.http.get<Board[]>(`${environment.API_URL}/boards/me`, { context: checkToken() })
   }
 }
