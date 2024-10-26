@@ -64,7 +64,7 @@ export class BoardComponent implements OnDestroy {
       if (id) {
         this.getBoard(id)
       } else {
-        this.router.navigate(['/boards'])
+        this.router.navigate(['/'])
       }
     })
   }
@@ -74,8 +74,16 @@ export class BoardComponent implements OnDestroy {
   }
 
   private getBoard(id: string) {
-    this.boardsService.getBoard(id).subscribe(board => {
-      this.board = board
+    this.boardsService.getBoard(id).subscribe({
+      next: board => { 
+
+        if(!board.hasOwnProperty('lists')){
+          board.lists = []
+        }
+        
+        this.board = board
+      },
+      error: () => { this.router.navigate(['/']) }
     })
   }
 
@@ -110,20 +118,18 @@ export class BoardComponent implements OnDestroy {
     const title = this.inputNewList.value
 
     if (this.board) {
-      this.listService
-        .create({
-          title,
-          boardId: this.board.id,
-          position: this.boardsService.getPositionNewItem(this.board.lists)
+      this.listService.create({
+        title,
+        boardId: this.board.id,
+        position: this.boardsService.getPositionNewCard(this.board.lists)
+      }).subscribe(list => {
+        this.board?.lists.push({
+          ...list,
+          cards: []
         })
-        .subscribe(list => {
-          this.board?.lists.push({
-            ...list,
-            cards: []
-          })
-          this.showNewListForm = false
-          this.inputNewList.setValue('')
-        })
+        this.showNewListForm = false
+        this.inputNewList.setValue('')
+      })
     }
   }
 
@@ -156,10 +162,11 @@ export class BoardComponent implements OnDestroy {
         .create({
           title,
           listId: list.id,
-          boardId: this.board.id,
-          position: this.boardsService.getPositionNewItem(list.cards)
+          position: this.boardsService.getPositionNewCard(list.cards)
         })
         .subscribe(card => {
+          console.log(list)
+          
           list.cards.push(card)
           this.inputCard.setValue('')
           list.showNewCardForm = false

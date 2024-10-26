@@ -9,18 +9,11 @@
           <h3 class="text-sm font-bold ml-2">{{ list.title }}</h3>
         </div>
 
-        <div
-          class="text-sm mt-2 min-h-[2.5rem]"
-          cdkDropList
-          [id]="list.id"
-          (cdkDropListDropped)="drop($event)"
+        <div class="text-sm mt-2 min-h-[2.5rem]" cdkDropList [id]="list.id" (cdkDropListDropped)="drop($event)"
           [cdkDropListData]="list.cards">
-          <div
-            (click)="openDialog(card)"
-            *ngFor="let card of list.cards"
-            cdkDrag
+          <div (click)="openDialog(card)" *ngFor="let card of list.cards" cdkDrag
             class="bg-white shadow p-2 rounded mt-2 border-b border-x-gray-300 cursor-pointer hover:bg-gray-400">
-            {{ card.title }}
+            {{ card.title }} - {{card.position}}
           </div>
         </div>
         <div class="mt-5">
@@ -29,8 +22,7 @@
             Add card
           </app-btn>
           <div *ngIf="list.showNewCardForm">
-            <textarea
-              [formControl]="inputCard"
+            <textarea [formControl]="inputCard"
               class="w-full rounded text-xs border-gray-300 border-b-gray-400 border-b-2"></textarea>
             <div class="flex space-x-2 justify-between">
               <app-btn color="success" (click)="createCard(list)">Create</app-btn>
@@ -39,12 +31,10 @@
           </div>
         </div>
       </div>
-      <app-btn *ngIf="!showNewListForm" color="light" class="shrink-0" (click)="showNewListForm = !showNewListForm"
-        >Add Column</app-btn
-      >
+      <app-btn *ngIf="!showNewListForm" color="light" class="shrink-0" (click)="showNewListForm = !showNewListForm">Add
+        Column</app-btn>
       <div *ngIf="showNewListForm" class="rounded bg-gray-200 w-72 p-2 mr-3">
-        <textarea
-          [formControl]="inputNewList"
+        <textarea [formControl]="inputNewList"
           class="w-full rounded text-xs border-gray-300 border-b-gray-400 border-b-2"></textarea>
         <div class="flex space-x-2 justify-between">
           <app-btn color="success" (click)="addList()">Create</app-btn>

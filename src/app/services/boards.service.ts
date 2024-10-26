@@ -30,6 +30,9 @@ export class BoardsService {
   // Obtiene la posición en la que se encuentra una card dentro de la lista/columna
   getPosition(cards: Card[], currentIndex: number) {
     // new Card
+
+    console.log(cards)
+    
     if (cards.length === 1) {
       return this.BUFFER_SPACE
     }
@@ -40,27 +43,30 @@ export class BoardsService {
       return firstItemPos / 2
     }
 
+    const lastIndex = cards.length - 1
+
     // Card in the middle
-    if (cards.length > 2 && currentIndex > 0 && currentIndex < cards.length - 1) {
+    if (cards.length > 2 && currentIndex > 0 && currentIndex < lastIndex) {
       const prevItemPos = cards[currentIndex - 1].position
       const afterItemPos = cards[currentIndex + 1].position
       return (prevItemPos + afterItemPos) / 2
     }
 
     // Card in the bottom
-    if (cards.length > 1 && currentIndex === cards.length - 1) {
-      const lastItemPos = cards[cards.length - 1].position
+    if (cards.length > 1 && currentIndex === lastIndex) {
+      const lastItemPos = cards[lastIndex - 1].position
       return lastItemPos + this.BUFFER_SPACE
     }
 
     return 0
   }
-
-  getPositionNewItem(elements: Card[] | List[]) {
-    if (elements.length === 0) {
+  
+  getPositionNewCard(cards: Card[] | List[]) {
+    if (cards.length === 0) {
       return this.BUFFER_SPACE
     }
-    const lastItemPos = elements[elements.length - 1].position
+    const lastIndex = cards.length - 1
+    const lastItemPos = cards[lastIndex].position
     return lastItemPos + this.BUFFER_SPACE
   }
 

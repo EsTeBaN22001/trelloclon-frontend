@@ -5,13 +5,10 @@ export interface Card {
   title: string
   description?: string
   position: number
-  list: List
+  listId: List['id']
 }
 
-export interface CreateCardDto extends Omit<Card, 'id' | 'list'> {
-  listId: string
-  boardId: string
-}
+export interface CreateCardDto extends Omit<Card, 'id'> {}
 
 export interface UpdateCardDto {
   title?: string
