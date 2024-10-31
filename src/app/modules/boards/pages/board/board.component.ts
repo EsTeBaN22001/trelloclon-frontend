@@ -2,7 +2,7 @@ import { Component, OnDestroy } from '@angular/core'
 import { FormControl, Validators } from '@angular/forms'
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop'
 import { Dialog } from '@angular/cdk/dialog'
-import { faPlus } from '@fortawesome/free-solid-svg-icons'
+import { faPlus, faXmark } from '@fortawesome/free-solid-svg-icons'
 import { TodoDialogComponent } from '@boards/components/todo-dialog/todo-dialog.component'
 import { BoardsService } from '@services/boards.service'
 import { ActivatedRoute, Router } from '@angular/router'
@@ -12,6 +12,7 @@ import { CardService } from '@services/card.service'
 import { List } from '@models/list.model'
 import { ListService } from '@services/list.service'
 import { BACKGROUNDS } from '@models/colors.model'
+import Swal from 'sweetalert2'
 
 @Component({
   selector: 'app-board',
@@ -28,7 +29,7 @@ import { BACKGROUNDS } from '@models/colors.model'
   ]
 })
 export class BoardComponent implements OnDestroy {
-  board: Board | null = null
+  board!: Board
 
   // Variable de estado para añadir una nueva columna/lista
   showNewListForm: boolean = false
@@ -47,6 +48,7 @@ export class BoardComponent implements OnDestroy {
 
   // FontAwesome icons
   faPlus = faPlus
+  faXmark = faXmark
 
   backgroundColor = BACKGROUNDS
 
@@ -75,15 +77,16 @@ export class BoardComponent implements OnDestroy {
 
   private getBoard(id: string) {
     this.boardsService.getBoard(id).subscribe({
-      next: board => { 
-
-        if(!board.hasOwnProperty('lists')){
+      next: board => {
+        if (!board.hasOwnProperty('lists')) {
           board.lists = []
         }
-        
+
         this.board = board
       },
-      error: () => { this.router.navigate(['/']) }
+      error: () => {
+        this.router.navigate(['/'])
+      }
     })
   }
 
@@ -109,27 +112,27 @@ export class BoardComponent implements OnDestroy {
         card: card
       }
     })
-    dialogRef.closed.subscribe(output => {
-      
-    })
+    dialogRef.closed.subscribe(output => {})
   }
 
   addList() {
     const title = this.inputNewList.value
 
     if (this.board) {
-      this.listService.create({
-        title,
-        boardId: this.board.id,
-        position: this.boardsService.getPositionNewCard(this.board.lists)
-      }).subscribe(list => {
-        this.board?.lists.push({
-          ...list,
-          cards: []
+      this.listService
+        .create({
+          title,
+          boardId: this.board.id,
+          position: this.boardsService.getPositionNewCard(this.board.lists)
         })
-        this.showNewListForm = false
-        this.inputNewList.setValue('')
-      })
+        .subscribe(list => {
+          this.board?.lists.push({
+            ...list,
+            cards: []
+          })
+          this.showNewListForm = false
+          this.inputNewList.setValue('')
+        })
     }
   }
 
@@ -166,7 +169,7 @@ export class BoardComponent implements OnDestroy {
         })
         .subscribe(card => {
           console.log(list)
-          
+
           list.cards.push(card)
           this.inputCard.setValue('')
           list.showNewCardForm = false
@@ -186,5 +189,40 @@ export class BoardComponent implements OnDestroy {
       }
     }
     return {}
+  }
+
+  deleteList(listId: List['id']) {
+    Swal.fire({
+      title: 'Estas seguro/a?',
+      text: 'Esta acción no se puede revertir!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, borrar!'
+    }).then(result => {
+      if (result.isConfirmed) {
+        this.listService.delete(listId).subscribe({
+          next: () => {
+            Swal.fire({
+              title: 'Correcto',
+              text: 'Se borró correctamente la columna',
+              icon: 'success',
+              confirmButtonColor: '#3085d6'
+            }).then(() => {
+              this.board.lists = this.board?.lists.filter((list: List) => list.id !== listId)
+              // console.log(this.board?.lists.filter((list: List) => list.id !== listId))
+            })
+          },
+          error: () => {
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'Hubo un error al borrar la columna'
+            })
+          }
+        })
+      }
+    })
   }
 }

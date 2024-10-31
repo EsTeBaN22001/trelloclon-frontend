@@ -15,4 +15,8 @@ export class ListService {
   create(dto: createListDto) {
     return this.http.post<List>(this.apiUrl, dto, { context: checkToken() })
   }
+
+  delete(id: List['id']) {
+    return this.http.delete(`${this.apiUrl}/${id}`, { context: checkToken() })
+  }
 }
