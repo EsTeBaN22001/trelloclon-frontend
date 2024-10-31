@@ -13,7 +13,7 @@
           [cdkDropListData]="list.cards">
           <div (click)="openDialog(card)" *ngFor="let card of list.cards" cdkDrag
             class="bg-white shadow p-2 rounded mt-2 border-b border-x-gray-300 cursor-pointer hover:bg-gray-400">
-            {{ card.title }} - {{card.position}}
+            {{ card.title }}
           </div>
         </div>
         <div class="mt-5">

@@ -32,7 +32,7 @@ export class BoardsService {
     // new Card
 
     console.log(cards)
-    
+
     if (cards.length === 1) {
       return this.BUFFER_SPACE
     }
@@ -60,7 +60,7 @@ export class BoardsService {
 
     return 0
   }
-  
+
   getPositionNewCard(cards: Card[] | List[]) {
     if (cards.length === 0) {
       return this.BUFFER_SPACE
@@ -76,5 +76,9 @@ export class BoardsService {
 
   setBackgroundColor(color: Colors) {
     this.backgroundColor$.next(color)
+  }
+
+  deleteBoard(id: Board['id']) {
+    return this.http.delete(`${this.apiUrl}/${id}`, { context: checkToken() })
   }
 }

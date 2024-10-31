@@ -14,7 +14,8 @@
 
     <cdk-accordion>
       <cdk-accordion-item #accordionMenu="cdkAccordionItem">
-        <button class="w-full py-1 px-2 flex justify-between items-center" type="button" (click)="accordionMenu.toggle()">
+        <button class="w-full py-1 px-2 flex justify-between items-center" type="button"
+          (click)="accordionMenu.toggle()">
           My workspace
           <fa-icon [icon]="accordionMenu.expanded ? faAngleUp : faAngleDown"></fa-icon>
         </button>
@@ -44,7 +45,7 @@
     <h1 class="text-lg font-bold mb-4"><fa-icon [icon]="faClock"></fa-icon> Recently viewed</h1>
     <div class="grid grid-cols-4 gap-4">
       <a [routerLink]="['/app/boards', board.id]" *ngFor="let board of boards">
-        <app-card-board [color]="board.backgroundColor">
+        <app-card-board [id]="board.id" [color]="board.backgroundColor" (delete)="confirmDelete($event)">
           {{ board.title }}
         </app-card-board>
       </a>
