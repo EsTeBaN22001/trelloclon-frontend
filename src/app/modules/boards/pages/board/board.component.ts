@@ -29,7 +29,7 @@ import Swal from 'sweetalert2'
   ]
 })
 export class BoardComponent implements OnDestroy {
-  board!: Board
+  board!: Board | null
 
   // Variable de estado para añadir una nueva columna/lista
   showNewListForm: boolean = false
@@ -210,8 +210,8 @@ export class BoardComponent implements OnDestroy {
               icon: 'success',
               confirmButtonColor: '#3085d6'
             }).then(() => {
+              // @ts-ignore
               this.board.lists = this.board?.lists.filter((list: List) => list.id !== listId)
-              // console.log(this.board?.lists.filter((list: List) => list.id !== listId))
             })
           },
           error: () => {
@@ -219,6 +219,47 @@ export class BoardComponent implements OnDestroy {
               icon: 'error',
               title: 'Oops...',
               text: 'Hubo un error al borrar la columna'
+            })
+          }
+        })
+      }
+    })
+  }
+
+  deleteCard(event: Event, cardId: Card['id'], listId: List['id']) {
+    event.stopPropagation()
+    event.preventDefault()
+
+    Swal.fire({
+      title: 'Estas seguro/a?',
+      text: 'Esta acción no se puede revertir!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, borrar!'
+    }).then(result => {
+      if (result.isConfirmed) {
+        this.cardService.delete(cardId).subscribe({
+          next: () => {
+            Swal.fire({
+              title: 'Correcto',
+              text: 'Se borró correctamente la tarjeta',
+              icon: 'success',
+              confirmButtonColor: '#3085d6'
+            }).then(() => {
+              this.board?.lists.map((list: List) => {
+                if (list.id === listId) {
+                  list.cards = list.cards.filter((card: Card) => card.id !== cardId)
+                }
+              })
+            })
+          },
+          error: () => {
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'Hubo un error al borrar la tarjeta'
             })
           }
         })

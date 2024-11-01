@@ -21,4 +21,9 @@ export class CardService {
   updateCard(id: Card['id'], changes: UpdateCardDto) {
     return this.http.put(`${this.apiUrl}/${id}`, changes, { context: checkToken() })
   }
+
+  // Elimina una card
+  delete(id: Card['id']) {
+    return this.http.delete(`${this.apiUrl}/${id}`, { context: checkToken() })
+  }
 }
