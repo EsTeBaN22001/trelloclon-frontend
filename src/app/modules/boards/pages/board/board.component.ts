@@ -90,7 +90,7 @@ export class BoardComponent implements OnDestroy {
     })
   }
 
-  drop(event: CdkDragDrop<Card[]>) {
+  dropCard(event: CdkDragDrop<Card[]>) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex)
     } else {
@@ -101,7 +101,25 @@ export class BoardComponent implements OnDestroy {
     const newItemPosition = this.boardsService.getPosition(event.container.data, event.currentIndex)
     const card = event.container.data[event.currentIndex]
     const listId = event.container.id
-    this.updateCard(card, newItemPosition, parseInt(listId))
+    // this.updateCard(card, newItemPosition, parseInt(listId))
+  }
+
+  dropList(event: CdkDragDrop<List[]>) {
+    moveItemInArray(this.board?.lists ?? [], event.previousIndex, event.currentIndex)
+
+    const currentList = this.board?.lists.find(list => {
+      return list.id == event.item.element.nativeElement.id
+    })
+
+    const newItemPosition = this.boardsService.getPosition(this.board?.lists ?? [], event.currentIndex)
+
+    this.board?.lists.forEach(list => {
+      if (list.id == event.item.element.nativeElement.id) {
+        list.position = newItemPosition
+      }
+    })
+    // Hacer petición al servicio y actualizar la posición
+    this.listService.updatePosition({ id: currentList?.id, position: newItemPosition }).subscribe()
   }
 
   openDialog(card: Card) {
@@ -168,8 +186,6 @@ export class BoardComponent implements OnDestroy {
           position: this.boardsService.getPositionNewCard(list.cards)
         })
         .subscribe(card => {
-          console.log(list)
-
           list.cards.push(card)
           this.inputCard.setValue('')
           list.showNewCardForm = false

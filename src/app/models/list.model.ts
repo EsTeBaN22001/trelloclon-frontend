@@ -11,3 +11,10 @@ export interface List {
 export interface createListDto extends Omit<List, 'id' | 'cards'> {
   boardId: string
 }
+
+export interface updateListDto {
+  id?: string
+  title?: string
+  position?: number
+  cards?: Card[]
+}

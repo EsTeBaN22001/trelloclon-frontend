@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { environment } from '@environments/environment'
 import { checkToken } from '@interceptors/token.interceptor'
-import { createListDto, List } from '@models/list.model'
+import { createListDto, List, updateListDto } from '@models/list.model'
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +14,10 @@ export class ListService {
 
   create(dto: createListDto) {
     return this.http.post<List>(this.apiUrl, dto, { context: checkToken() })
+  }
+
+  updatePosition(dto: updateListDto) {
+    return this.http.patch(this.apiUrl, dto, { context: checkToken() })
   }
 
   delete(id: List['id']) {

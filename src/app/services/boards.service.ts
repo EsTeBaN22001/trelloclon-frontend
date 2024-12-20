@@ -28,11 +28,7 @@ export class BoardsService {
   }
 
   // Obtiene la posición en la que se encuentra una card dentro de la lista/columna
-  getPosition(cards: Card[], currentIndex: number) {
-    // new Card
-
-    console.log(cards)
-
+  getPosition(cards: Card[] | List[], currentIndex: number) {
     if (cards.length === 1) {
       return this.BUFFER_SPACE
     }

@@ -3,8 +3,10 @@
     <div>
       <h2 class="text-xl font-bold text-white my-4">{{ board?.title }}</h2>
     </div>
-    <div class="flex grow items-start w-full h-full overflow-x-scroll" cdkDropListGroup>
-      <div class="rounded bg-gray-200 w-72 p-2 mr-3 shrink-0" *ngFor="let list of board?.lists">
+    <div class="flex grow items-start w-full h-full overflow-x-scroll" cdkDropList cdkDropListGroup
+      cdkDropListOrientation="horizontal" (cdkDropListDropped)="dropList($event)">
+      <div class="rounded bg-gray-200 w-72 p-2 mr-3 shrink-0 cursor-pointer" [id]="list.id" cdkDrag
+        *ngFor="let list of board?.lists">
         <div class="relative flex justify-between align-middle py-1">
           <h3 class="text-sm font-bold ml-2">{{ list.title }}</h3>
           <button class="absolute top-1 right-1 w-6 h-6 rounded-md text-white text-base font-bold" [ngClass]="colors"
@@ -13,7 +15,7 @@
           </button>
         </div>
 
-        <div class="text-sm mt-2 min-h-[2.5rem]" cdkDropList [id]="list.id" (cdkDropListDropped)="drop($event)"
+        <div class="text-sm mt-2 min-h-[2.5rem]" cdkDropList [id]="list.id" (cdkDropListDropped)="dropCard($event)"
           [cdkDropListData]="list.cards">
           <div (click)="openDialog(card)" *ngFor="let card of list.cards" cdkDrag
             class="relative bg-white shadow p-2 rounded mt-2 border-b border-x-gray-300 cursor-pointer hover:bg-gray-400">
