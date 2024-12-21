@@ -11,6 +11,7 @@ export interface Card {
 export interface CreateCardDto extends Omit<Card, 'id'> {}
 
 export interface UpdateCardDto {
+  id?: string
   title?: string
   description?: string
   position?: number

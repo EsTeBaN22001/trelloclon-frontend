@@ -100,8 +100,11 @@ export class BoardComponent implements OnDestroy {
     // Lógica de la posición de la card
     const newItemPosition = this.boardsService.getPosition(event.container.data, event.currentIndex)
     const card = event.container.data[event.currentIndex]
-    const listId = event.container.id
-    // this.updateCard(card, newItemPosition, parseInt(listId))
+    const listId = parseInt(event.container.id)
+    this.cardService.updatePosition({ id: card.id, position: newItemPosition, listId }).subscribe(res => {
+      // Actualizar el listId en la card
+      event.container.data[event.currentIndex].listId = `${listId}`
+    })
   }
 
   dropList(event: CdkDragDrop<List[]>) {
@@ -130,7 +133,7 @@ export class BoardComponent implements OnDestroy {
         card: card
       }
     })
-    dialogRef.closed.subscribe(output => {})
+    dialogRef.closed.subscribe()
   }
 
   addList() {
@@ -191,10 +194,6 @@ export class BoardComponent implements OnDestroy {
           list.showNewCardForm = false
         })
     }
-  }
-
-  updateCard(card: Card, position: number, listId: number) {
-    this.cardService.updateCard(card.id, { position, listId }).subscribe(cardUpdated => {})
   }
 
   get colors() {

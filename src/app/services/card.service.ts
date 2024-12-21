@@ -18,8 +18,8 @@ export class CardService {
   }
 
   // Actualiza la posición de la card
-  updateCard(id: Card['id'], changes: UpdateCardDto) {
-    return this.http.put(`${this.apiUrl}/${id}`, changes, { context: checkToken() })
+  updatePosition(dto: UpdateCardDto) {
+    return this.http.patch(this.apiUrl, dto, { context: checkToken() })
   }
 
   // Elimina una card
