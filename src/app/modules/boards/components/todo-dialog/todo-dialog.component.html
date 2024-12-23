@@ -3,7 +3,7 @@
     <fa-icon [icon]="faClose"></fa-icon>
   </button>
   <div class="flex space-x-2 mb-5">
-    <fa-icon class="text-gray-800" [icon]="faCheckToSlot"></fa-icon>
+    <fa-icon class="text-gray-800 pt-1" [icon]="faCheckToSlot"></fa-icon>
     <div class="flex flex-col">
       <h3 class="text-lg font-semibold text-gray-800">{{ card.title }}</h3>
       <p class="text-sm text-gray-500">in list ToDo</p>
@@ -11,17 +11,27 @@
   </div>
   <div class="flex w-full gap-4">
     <div class="flex space-x-2 mb-5 w-4/6">
-      <fa-icon class="text-gray-800" [icon]="faBars"></fa-icon>
-      <div class="flex flex-col">
-        <h3 class="text-lg font-semibold text-gray-800">Description</h3>
-        <p class="text-sm text-gray-500">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis, hic? Adipisci soluta cum odio, beatae ratione magni nobis, optio
-          similique rerum minus excepturi sed vel, id voluptatibus repellendus numquam quod.
-        </p>
-        <div class="flex space-x-2">
-          <button type="button" (click)="closeWithRta(true)">Si</button>
-          <button type="button" (click)="closeWithRta(false)">No</button>
+      <fa-icon class="text-gray-800 pt-1" [icon]="faBars"></fa-icon>
+      <div class="flex w-full flex-col">
+        <div class="flex justify- gap-x-4 align-middle">
+          <h3 class=" text-lg font-semibold text-gray-800">Description</h3>
+          <button type="button" class="focus:outline-none" (click)="openEditDesciptionCardForm()">
+            <fa-icon class="text-gray-800" [icon]="faPenToSquare"></fa-icon>
+          </button>
         </div>
+        <div class="mt-5">
+          <div *ngIf="showDescriptionEditForm">
+            <textarea [formControl]="inputDescription"
+              class="w-full rounded text-xs border-gray-300 border-b-gray-400 border-b-2"></textarea>
+            <div class="flex space-x-2 justify-between">
+              <app-btn color="success" (click)="saveDescriptionCard(card)">Create</app-btn>
+              <app-btn color="gray" (click)="closeEditDesciptionCardForm()">Close</app-btn>
+            </div>
+          </div>
+        </div>
+        <p *ngIf="!showDescriptionEditForm" class="text-sm text-gray-500">
+          {{card.description || 'No hay descripción'}}
+        </p>
       </div>
     </div>
     <div class="flex flex-auto space-y-2 flex-col">

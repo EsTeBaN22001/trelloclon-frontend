@@ -101,7 +101,7 @@ export class BoardComponent implements OnDestroy {
     const newItemPosition = this.boardsService.getPosition(event.container.data, event.currentIndex)
     const card = event.container.data[event.currentIndex]
     const listId = parseInt(event.container.id)
-    this.cardService.updatePosition({ id: card.id, position: newItemPosition, listId }).subscribe(res => {
+    this.cardService.updateCard({ id: card.id, position: newItemPosition, listId }).subscribe(res => {
       // Actualizar el listId en la card
       event.container.data[event.currentIndex].listId = `${listId}`
     })
@@ -127,7 +127,7 @@ export class BoardComponent implements OnDestroy {
 
   openDialog(card: Card) {
     const dialogRef = this.dialog.open(TodoDialogComponent, {
-      minWidth: '300px',
+      minWidth: '30%',
       maxWidth: '50%',
       data: {
         card: card

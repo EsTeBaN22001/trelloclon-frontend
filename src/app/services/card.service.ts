@@ -18,7 +18,12 @@ export class CardService {
   }
 
   // Actualiza la posición de la card
-  updatePosition(dto: UpdateCardDto) {
+  updateCard(dto: UpdateCardDto) {
+    return this.http.patch(`${this.apiUrl}/${dto.id}`, dto, { context: checkToken() })
+  }
+
+  // Actualiza la descripción de una card
+  updateDescription(dto: UpdateCardDto) {
     return this.http.patch(this.apiUrl, dto, { context: checkToken() })
   }
 
