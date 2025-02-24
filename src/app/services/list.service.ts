@@ -16,8 +16,8 @@ export class ListService {
     return this.http.post<List>(this.apiUrl, dto, { context: checkToken() })
   }
 
-  updatePosition(dto: updateListDto) {
-    return this.http.patch(this.apiUrl, dto, { context: checkToken() })
+  update(dto: updateListDto) {
+    return this.http.patch(`${this.apiUrl}/${dto.id}`, dto, { context: checkToken() })
   }
 
   delete(id: List['id']) {

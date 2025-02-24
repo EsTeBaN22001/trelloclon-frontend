@@ -8,18 +8,30 @@
       <div class="rounded bg-gray-200 w-72 p-2 mr-3 shrink-0 cursor-pointer" [id]="list.id" cdkDrag
         *ngFor="let list of board?.lists">
         <div class="relative flex justify-between align-middle py-1">
-          <h3 class="text-sm font-bold ml-2">{{ list.title }}</h3>
-          <button class="absolute top-1 right-1 w-6 h-6 rounded-md text-white text-base font-bold" [ngClass]="colors"
-            (click)="deleteList(list.id)">
+          <h3 class="text-sm font-bold ml-2">
+            {{ list.title }}
+            <button class="focus:outline-none" (click)="openEditTitleList(list)">
+              <fa-icon class="text-gray-800 pt-1" [icon]="faPenToSquare"></fa-icon>
+            </button>
+          </h3>
+          <button class="absolute top-1 right-1 w-6 h-6 font-bold" (click)="deleteList(list.id)">
             <fa-icon [icon]="faXmark"></fa-icon>
           </button>
         </div>
-
+        <div *ngIf="list.showEditTitleForm">
+          <textarea [formControl]="inputEditTitleList"
+            class="w-full rounded text-xs border-gray-300 border-b-gray-400 border-b-2"></textarea>
+          <div class="flex space-x-2 justify-between">
+            <app-btn color="success" (click)="updateTitleList(list)">Save</app-btn>
+            <app-btn color="gray" (click)="list.showEditTitleForm = !list.showEditTitleForm">Close</app-btn>
+          </div>
+        </div>
         <div class="text-sm mt-2 min-h-[2.5rem]" cdkDropList [id]="list.id" (cdkDropListDropped)="dropCard($event)"
           [cdkDropListData]="list.cards">
-          <div (click)="openDialog(card)" *ngFor="let card of list.cards" cdkDrag
+          <div (click)="openDialog(card, list.title)" *ngFor="let card of list.cards" cdkDrag
             class="relative bg-white shadow p-2 rounded mt-2 border-b border-x-gray-300 cursor-pointer hover:bg-gray-400">
-            {{ card.title }}
+            <p class="text-base mb-3">{{ card.title }}</p>
+            <p class="text-xs text-gray-500">{{card.description}}</p>
             <button class="absolute top-1 right-1 w-6 h-6 rounded-md  text-base font-bold"
               (click)="deleteCard($event, card.id, list.id)">
               <fa-icon [icon]="faXmark"></fa-icon>

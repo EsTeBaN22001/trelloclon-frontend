@@ -14,9 +14,11 @@ import {
 import { Card } from '@models/card.model'
 import { FormControl, Validators } from '@angular/forms'
 import { CardService } from '@services/card.service'
+import { List } from '@models/list.model'
 
 interface InputData {
   card: Card
+  listTitle: List['title']
 }
 
 interface OutputData {
@@ -39,10 +41,18 @@ export class TodoDialogComponent {
   faPlus = faPlus
 
   card: Card
+  listTitle: List['title']
 
   showDescriptionEditForm: boolean = false
 
   inputDescription = new FormControl<string>('', {
+    nonNullable: true,
+    validators: [Validators.required]
+  })
+
+  showTitleEditForm: boolean = false
+
+  inputTitle = new FormControl<string>('', {
     nonNullable: true,
     validators: [Validators.required]
   })
@@ -53,30 +63,41 @@ export class TodoDialogComponent {
     private cardService: CardService
   ) {
     this.card = data.card
+    this.listTitle = data.listTitle
     this.inputDescription.setValue(this.card.description || '')
+    this.inputTitle.setValue(this.card.title || '')
   }
 
   close() {
     this.dialogRef.close()
   }
 
-  openEditDesciptionCardForm() {
-    this.showDescriptionEditForm = true
+  toggleEditDescriptionCardForm() {
+    this.showDescriptionEditForm = !this.showDescriptionEditForm
   }
 
-  closeEditDesciptionCardForm() {
-    this.showDescriptionEditForm = false
+  toggleEditTitleCardForm() {
+    this.showTitleEditForm = !this.showTitleEditForm
   }
 
   saveDescriptionCard(card: Card) {
-    const newDescription = this.inputDescription.value
+    this.card.description = this.inputDescription.value
 
-    this.card.description = newDescription
-
-    this.closeEditDesciptionCardForm()
+    this.toggleEditDescriptionCardForm()
 
     // Petición al servicio para guardar la descripción
     this.cardService.updateCard({ id: card.id, description: card.description }).subscribe(res => {
+      console.log(res)
+    })
+  }
+
+  saveTitleCard(card: Card) {
+    this.card.title = this.inputTitle.value
+
+    this.toggleEditTitleCardForm()
+
+    // Petición al servicio para guardar el títutlo
+    this.cardService.updateCard({ id: card.id, title: card.title }).subscribe(res => {
       console.log(res)
     })
   }

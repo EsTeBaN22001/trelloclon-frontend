@@ -2,7 +2,7 @@ import { Component, OnDestroy } from '@angular/core'
 import { FormControl, Validators } from '@angular/forms'
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop'
 import { Dialog } from '@angular/cdk/dialog'
-import { faPlus, faXmark } from '@fortawesome/free-solid-svg-icons'
+import { faPlus, faXmark, faPenToSquare } from '@fortawesome/free-solid-svg-icons'
 import { TodoDialogComponent } from '@boards/components/todo-dialog/todo-dialog.component'
 import { BoardsService } from '@services/boards.service'
 import { ActivatedRoute, Router } from '@angular/router'
@@ -34,6 +34,9 @@ export class BoardComponent implements OnDestroy {
   // Variable de estado para añadir una nueva columna/lista
   showNewListForm: boolean = false
 
+  // Variable de estado para editar el título de una lista
+  showEditTitleListForm: boolean = false
+
   // Formulario para crear una nueva card
   inputCard = new FormControl<string>('', {
     nonNullable: true,
@@ -46,9 +49,15 @@ export class BoardComponent implements OnDestroy {
     validators: [Validators.required]
   })
 
+  inputEditTitleList = new FormControl<string>('', {
+    nonNullable: true,
+    validators: [Validators.required]
+  })
+
   // FontAwesome icons
   faPlus = faPlus
   faXmark = faXmark
+  faPenToSquare = faPenToSquare
 
   backgroundColor = BACKGROUNDS
 
@@ -122,15 +131,16 @@ export class BoardComponent implements OnDestroy {
       }
     })
     // Hacer petición al servicio y actualizar la posición
-    this.listService.updatePosition({ id: currentList?.id, position: newItemPosition }).subscribe()
+    this.listService.update({ id: currentList?.id, position: newItemPosition }).subscribe()
   }
 
-  openDialog(card: Card) {
+  openDialog(card: Card, listTitle: string) {
     const dialogRef = this.dialog.open(TodoDialogComponent, {
       minWidth: '30%',
       maxWidth: '50%',
       data: {
-        card: card
+        card: card,
+        listTitle: listTitle
       }
     })
     dialogRef.closed.subscribe()
@@ -280,5 +290,38 @@ export class BoardComponent implements OnDestroy {
         })
       }
     })
+  }
+
+  // Abrir el formulario para editar el nombre de una lista según su id
+  openEditTitleList(list: List) {
+    if (this.board?.lists) {
+      this.board.lists = this.board.lists.map(iteratorList => {
+        if (iteratorList.id === list.id) {
+          this.inputEditTitleList.setValue(iteratorList.title)
+          return {
+            ...iteratorList,
+            showEditTitleForm: true
+          }
+        }
+        return {
+          ...iteratorList,
+          showEditTitleForm: false
+        }
+      })
+    }
+  }
+
+  // Actualizar el valor del título de la lista desde su servicio
+  updateTitleList(list: List) {
+    // Mostrar en el título de la lista el nuevo valor y ocultar el EditForm
+    this.board?.lists.map(iteratorList => {
+      if (iteratorList.id == list.id) {
+        iteratorList.title = this.inputEditTitleList.value
+        iteratorList.showEditTitleForm = false
+      }
+    })
+
+    // Hacer la petición al servicio y actualizar el valor
+    this.listService.update({ id: list.id, title: list.title }).subscribe()
   }
 }

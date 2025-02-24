@@ -1,40 +1,59 @@
-<div class="p-6 bg-gray-100 relative rounded shadow">
+<div class="grid grid-cols-2 p-6 bg-gray-100 relative rounded shadow pt-10">
   <button (click)="close()" type="button" class="absolute top-3 right-3 focus:outline-none p-2">
     <fa-icon [icon]="faClose"></fa-icon>
   </button>
-  <div class="flex space-x-2 mb-5">
-    <fa-icon class="text-gray-800 pt-1" [icon]="faCheckToSlot"></fa-icon>
-    <div class="flex flex-col">
-      <h3 class="text-lg font-semibold text-gray-800">{{ card.title }}</h3>
-      <p class="text-sm text-gray-500">in list ToDo</p>
+  <div class="col-span-2 sm:col-span-1 flex space-x-2 flex-col mb-5 gap-y-5">
+    <div>
+      <div class="flex justify-between gap-x-4 align-middle block">
+        <span class="flex justify-start items-center gap-x-2">
+          <fa-icon class="text-gray-800 pt-1" [icon]="faCheckToSlot"></fa-icon>
+          <h3 class="text-lg font-semibold text-gray-800">{{ card.title }}</h3>
+        </span>
+        <button type="button" class="focus:outline-none" (click)="toggleEditTitleCardForm()">
+          <fa-icon class="text-gray-800" [icon]="faPenToSquare"></fa-icon>
+        </button>
+      </div>
+      <div class="mt-5">
+        <div *ngIf="showTitleEditForm">
+          <textarea [formControl]="inputTitle"
+            class="w-full rounded text-xs border-gray-300 border-b-gray-400 border-b-2 h-28"></textarea>
+          <div class="flex space-x-2 justify-between">
+            <app-btn color="success" (click)="saveTitleCard(card)">Save</app-btn>
+            <app-btn color="gray" (click)="toggleEditTitleCardForm()">Close</app-btn>
+          </div>
+        </div>
+      </div>
+      <p *ngIf="!showTitleEditForm" class="text-sm text-gray-500">in list {{listTitle}}</p>
     </div>
-  </div>
-  <div class="flex w-full gap-4">
-    <div class="flex space-x-2 mb-5 w-4/6">
-      <fa-icon class="text-gray-800 pt-1" [icon]="faBars"></fa-icon>
-      <div class="flex w-full flex-col">
-        <div class="flex justify- gap-x-4 align-middle">
-          <h3 class=" text-lg font-semibold text-gray-800">Description</h3>
-          <button type="button" class="focus:outline-none" (click)="openEditDesciptionCardForm()">
+    <div class="flex space-x-2 flex-col mb-5">
+      <div class="flex flex-col">
+        <div class="flex justify-between gap-x-4 align-middle">
+          <span class="flex justify-start items-center gap-x-2">
+            <fa-icon class="text-gray-800" [icon]="faBars"></fa-icon>
+            <h3 class=" text-lg font-semibold text-gray-800">Description</h3>
+          </span>
+          <button type="button" class="focus:outline-none" (click)="toggleEditDescriptionCardForm()">
             <fa-icon class="text-gray-800" [icon]="faPenToSquare"></fa-icon>
           </button>
         </div>
-        <div class="mt-5">
-          <div *ngIf="showDescriptionEditForm">
+        <div class="mt-5 w-full">
+          <div *ngIf=" showDescriptionEditForm">
             <textarea [formControl]="inputDescription"
-              class="w-full rounded text-xs border-gray-300 border-b-gray-400 border-b-2"></textarea>
+              class="w-full rounded text-xs border-gray-300 border-b-gray-400 border-b-2 h-28"></textarea>
             <div class="flex space-x-2 justify-between">
-              <app-btn color="success" (click)="saveDescriptionCard(card)">Create</app-btn>
-              <app-btn color="gray" (click)="closeEditDesciptionCardForm()">Close</app-btn>
+              <app-btn color="success" (click)="saveDescriptionCard(card)">Save</app-btn>
+              <app-btn color="gray" (click)="toggleEditDescriptionCardForm()">Close</app-btn>
             </div>
           </div>
         </div>
-        <p *ngIf="!showDescriptionEditForm" class="text-sm text-gray-500">
+        <p *ngIf="!showDescriptionEditForm" class="text-sm text-gray-500 inline w-10/12">
           {{card.description || 'No hay descripción'}}
         </p>
       </div>
     </div>
-    <div class="flex flex-auto space-y-2 flex-col">
+  </div>
+  <div class="col-span-2 sm:col-span-1 flex w-full">
+    <div class="mx-6">
       <app-btn typeBtn="button" color="light">
         <span class="flex space-x-2 text-left">
           <fa-icon class="text-gray-800" [icon]="faUser"></fa-icon>

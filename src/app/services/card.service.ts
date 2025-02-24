@@ -22,11 +22,6 @@ export class CardService {
     return this.http.patch(`${this.apiUrl}/${dto.id}`, dto, { context: checkToken() })
   }
 
-  // Actualiza la descripción de una card
-  updateDescription(dto: UpdateCardDto) {
-    return this.http.patch(this.apiUrl, dto, { context: checkToken() })
-  }
-
   // Elimina una card
   delete(id: Card['id']) {
     return this.http.delete(`${this.apiUrl}/${id}`, { context: checkToken() })
