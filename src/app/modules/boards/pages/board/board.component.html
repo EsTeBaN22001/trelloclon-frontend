@@ -1,7 +1,20 @@
 <div class="w-full h-full px-4 pb-4" [ngClass]="colors">
   <div class="flex flex-col h-full">
     <div>
-      <h2 class="text-xl font-bold text-white my-4">{{ board?.title }}</h2>
+      <h2 class="text-xl font-bold text-white my-4">
+        {{ board?.title }}
+        <button class="focus:outline-none" (click)="board && openEditTitleBoard(board)">
+          <fa-icon class="text-gray-800 pt-1" [icon]="faPenToSquare"></fa-icon>
+        </button>
+      </h2>
+      <div class="max-w-fit mb-2" *ngIf="showEditTitleBoardForm && board">
+        <textarea [formControl]="inputEditTitleBoard"
+          class="w-full rounded text-xs border-gray-300 border-b-gray-400 border-b-2"></textarea>
+        <div class="flex space-x-2 justify-between">
+          <app-btn color="success" (click)="updateTitleBoard(board)">Save</app-btn>
+          <app-btn color="gray" (click)="showEditTitleBoardForm = !showEditTitleBoardForm">Close</app-btn>
+        </div>
+      </div>
     </div>
     <div class="flex grow items-start w-full h-full overflow-x-scroll" cdkDropList cdkDropListGroup
       cdkDropListOrientation="horizontal" (cdkDropListDropped)="dropList($event)">

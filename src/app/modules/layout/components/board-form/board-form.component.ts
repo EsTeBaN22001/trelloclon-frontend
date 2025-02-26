@@ -41,7 +41,7 @@ export class BoardFormComponent implements OnInit {
   onSave() {
     if (this.form.valid) {
       const { title, backgroundColor } = this.form.getRawValue()
-      this.boardsService.createBoard(title ?? '', backgroundColor).subscribe(board => {
+      this.boardsService.createBoard({ title: title ?? '', backgroundColor }).subscribe(board => {
         this.closeOverlay.next(false)
         this.router.navigate([`/app/boards/${board.id}`])
       })

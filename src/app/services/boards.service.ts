@@ -1,8 +1,8 @@
-import { HttpClient, HttpClientModule } from '@angular/common/http'
+import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { environment } from '@environments/environment'
 import { checkToken } from '@interceptors/token.interceptor'
-import { Board } from '@models/board.model'
+import { Board, createBoardDto, updateBoardDto } from '@models/board.model'
 import { Card } from '@models/card.model'
 import { Colors } from '@models/colors.model'
 import { List } from '@models/list.model'
@@ -66,8 +66,12 @@ export class BoardsService {
     return lastItemPos + this.BUFFER_SPACE
   }
 
-  createBoard(title: string, backgroundColor: Colors) {
-    return this.http.post<Board>(this.apiUrl, { title, backgroundColor }, { context: checkToken() })
+  createBoard(dto: createBoardDto) {
+    return this.http.post<Board>(this.apiUrl, dto, { context: checkToken() })
+  }
+
+  updateBoard(dto: updateBoardDto) {
+    return this.http.patch(`${this.apiUrl}/${dto.id}`, dto, { context: checkToken() })
   }
 
   setBackgroundColor(color: Colors) {

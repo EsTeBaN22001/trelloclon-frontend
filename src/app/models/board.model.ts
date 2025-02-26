@@ -14,10 +14,21 @@ export interface Board {
 }
 
 interface Member {
-  id: number
+  id: string
   name: string
   email: string
   avatar: string
   creationAt: string
   updatedAt: string
+}
+
+export interface createBoardDto {
+  title: string
+  backgroundColor: Colors
+}
+
+export interface updateBoardDto {
+  id?: string
+  title?: string
+  backgroundColor?: Colors
 }

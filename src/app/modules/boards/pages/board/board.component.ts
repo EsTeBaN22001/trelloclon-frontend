@@ -31,25 +31,25 @@ import Swal from 'sweetalert2'
 export class BoardComponent implements OnDestroy {
   board!: Board | null
 
-  // Variable de estado para añadir una nueva columna/lista
+  // Variables de estado para mostrar formulario de edición o creación
   showNewListForm: boolean = false
-
-  // Variable de estado para editar el título de una lista
   showEditTitleListForm: boolean = false
+  showEditTitleBoardForm: boolean = false
 
-  // Formulario para crear una nueva card
+  // Forms para crear o editar
   inputCard = new FormControl<string>('', {
     nonNullable: true,
     validators: [Validators.required]
   })
-
-  // Formulario para crear una nueva List
   inputNewList = new FormControl<string>('', {
     nonNullable: true,
     validators: [Validators.required]
   })
-
   inputEditTitleList = new FormControl<string>('', {
+    nonNullable: true,
+    validators: [Validators.required]
+  })
+  inputEditTitleBoard = new FormControl<string>('', {
     nonNullable: true,
     validators: [Validators.required]
   })
@@ -316,12 +316,25 @@ export class BoardComponent implements OnDestroy {
     // Mostrar en el título de la lista el nuevo valor y ocultar el EditForm
     this.board?.lists.map(iteratorList => {
       if (iteratorList.id == list.id) {
-        iteratorList.title = this.inputEditTitleList.value
-        iteratorList.showEditTitleForm = false
+        if (list.title !== this.inputEditTitleList.value) {
+          iteratorList.title = this.inputEditTitleList.value
+          iteratorList.showEditTitleForm = false
+          this.listService.update({ id: list.id, title: list.title }).subscribe()
+        }
       }
     })
+  }
 
-    // Hacer la petición al servicio y actualizar el valor
-    this.listService.update({ id: list.id, title: list.title }).subscribe()
+  openEditTitleBoard(board: Board) {
+    this.showEditTitleBoardForm = true
+    this.inputEditTitleBoard.setValue(board.title)
+  }
+
+  updateTitleBoard(board: Board) {
+    if (board.title === this.inputEditTitleBoard.value) return
+
+    board.title = this.inputEditTitleBoard.value
+    this.boardsService.updateBoard({ id: board.id, title: board.title }).subscribe()
+    this.showEditTitleBoardForm = false
   }
 }
