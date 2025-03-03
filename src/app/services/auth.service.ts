@@ -5,8 +5,14 @@ import { AvailabilityResponse } from '@models/request-status.model'
 import { tap } from 'rxjs'
 import { TokenService } from './token.service'
 import { ResponseLogin } from '@models/auth.model'
-import { User } from '@models/user.model'
+import { changeUserinfoDto, User } from '@models/user.model'
 import { checkToken } from '@interceptors/token.interceptor'
+
+interface changeUserInfoResponseDto {
+  success: string
+  message: string
+  newToken?: string
+}
 
 @Injectable({
   providedIn: 'root'
@@ -61,5 +67,10 @@ export class AuthService {
 
   getProfile() {
     return this.http.get<User>(`${this.apiUrl}/profile`, { context: checkToken() })
+  }
+
+  changeUserinfo(dto: changeUserinfoDto) {
+    console.log(dto)
+    return this.http.post<changeUserInfoResponseDto>(`${this.apiUrl}/change-userinfo`, dto, { context: checkToken() })
   }
 }

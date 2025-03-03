@@ -49,7 +49,7 @@
 
 <ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="menuOverlay"
   [cdkConnectedOverlayOpen]="isOpenOverlayAvatar" (overlayOutsideClick)="isOpenOverlayAvatar = !isOpenOverlayAvatar">
-  <div class="z-50 my-4 w-60 text-base list-none bg-white rounded divide-y divide-gray-100 shadow">
+  <div class="z-50 my-4 min-w-fit text-base list-none bg-white rounded divide-y divide-gray-100 shadow">
     <div class="py-2 px-4 text-center relative">
       <span class="block text-normal text-gray-900">Account</span>
       <button (click)="isOpenOverlayAvatar = !isOpenOverlayAvatar"
@@ -66,7 +66,7 @@
     </div>
     <ul class="py-1">
       <li>
-        <a routerLink="/app/profile"
+        <a routerLink="/app/profile" (click)="isOpenOverlayAvatar = !isOpenOverlayAvatar"
           class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600">Profile</a>
       </li>
       <li>

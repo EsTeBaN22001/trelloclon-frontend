@@ -11,6 +11,7 @@ export class ButtonComponent {
   @Input() loading = false
   @Input() typeBtn: 'reset' | 'submit' | 'button' = 'button'
   @Input() color: Colors = 'primary'
+  @Input() width: string = 'w-full'
   faSpinner = faSpinner
 
   mapColors = COLORS
@@ -20,6 +21,8 @@ export class ButtonComponent {
   get colors() {
     const colors = this.mapColors[this.color]
     if (colors) {
+      // Le agrega el input width si es que existe
+      colors[this.width] = true
       return colors
     }
     return {}

@@ -47,8 +47,8 @@ export class BoardsComponent implements OnInit {
 
   confirmDelete(boardId: string) {
     Swal.fire({
-      title: 'Estas seguro/a?',
-      text: 'Esta acción no se puede revertir!',
+      title: 'Are you shure?',
+      text: 'This action cannot be reversed!',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -59,8 +59,8 @@ export class BoardsComponent implements OnInit {
         this.boardService.deleteBoard(boardId).subscribe({
           next: () => {
             Swal.fire({
-              title: 'Correcto',
-              text: 'Se borró correctamente el tablero',
+              title: 'Correct',
+              text: 'The board was successfully cleared',
               icon: 'success',
               confirmButtonColor: '#3085d6'
             }).then(() => {
@@ -71,7 +71,7 @@ export class BoardsComponent implements OnInit {
             Swal.fire({
               icon: 'error',
               title: 'Oops...',
-              text: 'Hubo un error al borrar el tablero'
+              text: 'There was an error deleting the board'
             })
           }
         })

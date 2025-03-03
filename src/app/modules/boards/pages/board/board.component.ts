@@ -218,8 +218,8 @@ export class BoardComponent implements OnDestroy {
 
   deleteList(listId: List['id']) {
     Swal.fire({
-      title: 'Estas seguro/a?',
-      text: 'Esta acción no se puede revertir!',
+      title: 'Are you sure?',
+      text: 'This action cannot be reversed!',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -230,8 +230,8 @@ export class BoardComponent implements OnDestroy {
         this.listService.delete(listId).subscribe({
           next: () => {
             Swal.fire({
-              title: 'Correcto',
-              text: 'Se borró correctamente la columna',
+              title: 'Correct',
+              text: 'Column was successfully deleted',
               icon: 'success',
               confirmButtonColor: '#3085d6'
             }).then(() => {
@@ -243,7 +243,7 @@ export class BoardComponent implements OnDestroy {
             Swal.fire({
               icon: 'error',
               title: 'Oops...',
-              text: 'Hubo un error al borrar la columna'
+              text: 'There was an error deleting the column'
             })
           }
         })
@@ -256,8 +256,8 @@ export class BoardComponent implements OnDestroy {
     event.preventDefault()
 
     Swal.fire({
-      title: 'Estas seguro/a?',
-      text: 'Esta acción no se puede revertir!',
+      title: 'Are you sure?',
+      text: 'This action cannot be reversed!',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -268,8 +268,8 @@ export class BoardComponent implements OnDestroy {
         this.cardService.delete(cardId).subscribe({
           next: () => {
             Swal.fire({
-              title: 'Correcto',
-              text: 'Se borró correctamente la tarjeta',
+              title: 'Correct',
+              text: 'The card was deleted successfully',
               icon: 'success',
               confirmButtonColor: '#3085d6'
             }).then(() => {
@@ -284,7 +284,7 @@ export class BoardComponent implements OnDestroy {
             Swal.fire({
               icon: 'error',
               title: 'Oops...',
-              text: 'Hubo un error al borrar la tarjeta'
+              text: 'There was an error deleting the card'
             })
           }
         })
