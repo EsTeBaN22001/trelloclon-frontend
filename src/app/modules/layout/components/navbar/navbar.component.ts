@@ -5,7 +5,6 @@ import { Colors } from '@models/colors.model'
 import { User } from '@models/user.model'
 import { AuthService } from '@services/auth.service'
 import { BoardsService } from '@services/boards.service'
-import { TokenService } from '@services/token.service'
 import { UsersService } from '@services/users.service'
 
 @Component({

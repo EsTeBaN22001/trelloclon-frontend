@@ -40,18 +40,22 @@ export class TodoDialogComponent {
   faPenToSquare = faPenToSquare
   faPlus = faPlus
 
-  card: Card
+  card: Card = {
+    id: '',
+    title: '',
+    description: '',
+    position: 0,
+    listId: ''
+  }
   listTitle: List['title']
 
-  showDescriptionEditForm: boolean = false
-
+  showDescriptionEditForm = false
   inputDescription = new FormControl<string>('', {
     nonNullable: true,
     validators: [Validators.required]
   })
 
-  showTitleEditForm: boolean = false
-
+  showTitleEditForm = false
   inputTitle = new FormControl<string>('', {
     nonNullable: true,
     validators: [Validators.required]
@@ -62,7 +66,7 @@ export class TodoDialogComponent {
     @Inject(DIALOG_DATA) data: InputData,
     private cardService: CardService
   ) {
-    this.card = data.card
+    this.card = data.card || {} // Asigna data.card si existe, o un objeto vacío si no
     this.listTitle = data.listTitle
     this.inputDescription.setValue(this.card.description || '')
     this.inputTitle.setValue(this.card.title || '')
@@ -96,7 +100,7 @@ export class TodoDialogComponent {
 
     this.toggleEditTitleCardForm()
 
-    // Petición al servicio para guardar el títutlo
+    // Petición al servicio para guardar el título
     this.cardService.updateCard({ id: card.id, title: card.title }).subscribe(res => {
       console.log(res)
     })

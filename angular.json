@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "trello-auth": {
+    "trelloclon-frontend": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,17 +17,14 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/trello-auth",
+            "outputPath": "dist/trelloclon-frontend",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": ["src/favicon.ico", "src/assets"],
-            "styles": [
-              "@angular/material/prebuilt-themes/indigo-pink.css",
-              "src/styles.scss"
-            ],
+            "styles": ["@angular/material/prebuilt-themes/indigo-pink.css", "src/styles.scss"],
             "allowedCommonJsDependencies": ["sweetalert2"]
           },
           "configurations": {
@@ -67,10 +64,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "trello-auth:build:production"
+              "browserTarget": "trelloclon-frontend:build:production"
             },
             "development": {
-              "browserTarget": "trello-auth:build:development"
+              "browserTarget": "trelloclon-frontend:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -78,7 +75,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "trello-auth:build"
+            "browserTarget": "trelloclon-frontend:build"
           }
         },
         "test": {
@@ -90,10 +87,7 @@
             "karmaConfig": "karma.conf.js",
             "inlineStyleLanguage": "scss",
             "assets": ["src/favicon.ico", "src/assets"],
-            "styles": [
-              "@angular/material/prebuilt-themes/indigo-pink.css",
-              "src/styles.scss"
-            ],
+            "styles": ["@angular/material/prebuilt-themes/indigo-pink.css", "src/styles.scss"],
             "scripts": []
           }
         },
